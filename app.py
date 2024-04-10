@@ -34,6 +34,10 @@ def home():
         
         weight, height = convert_units(weight, weight_unit, height, height_unit)
         bmi = calculate_bmi(weight, height)
+
+        # Debug print to check values
+        print(f'Weight: {weight}, Height: {height}, BMI: {bmi}') 
+
         yoga, nutrition = recommend_yoga_and_nutrition(bmi)
         
         return render_template('results.html', bmi=round(bmi, 2), yoga=yoga, nutrition=nutrition)
@@ -41,3 +45,4 @@ def home():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
