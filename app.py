@@ -24,23 +24,27 @@ def recommend_yoga_and_nutrition(bmi):
     else:
         return "Balasana, Savasana", "Adopt a low-calorie diet, increase water intake, and consult a nutritionist for a personalized plan."
 
+# Route for handling the index and results
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if request.method == 'POST':
+        # Collect data from form
         weight = float(request.form['weight'])
         height = float(request.form['height'])
-        weight_unit = request.form['weight_unit']
-        height_unit = request.form['height_unit']
-        
+        weight_unit = request.form.get('weight_unit')
+        height_unit = request.form.get('height_unit')
+
+        # Convert units and calculate BMI
         weight, height = convert_units(weight, weight_unit, height, height_unit)
         bmi = calculate_bmi(weight, height)
 
-        # Debug print to check values
-        print(f'Weight: {weight}, Height: {height}, BMI: {bmi}') 
-
+        # Get recommendations
         yoga, nutrition = recommend_yoga_and_nutrition(bmi)
-        
+
+        # Render the results template with the BMI value and recommendations
         return render_template('results.html', bmi=round(bmi, 2), yoga=yoga, nutrition=nutrition)
+
+    # Render the index page if method is GET
     return render_template('index.html')
 
 if __name__ == '__main__':
