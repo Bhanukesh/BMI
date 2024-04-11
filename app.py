@@ -2,17 +2,26 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
+# Utility functions
 def convert_units(weight, weight_unit, height, height_unit):
-    # Convert to kilograms if weight is in pounds
     if weight_unit == 'lbs':
         weight = weight * 0.453592
-    # Convert to meters if height is in inches
     if height_unit == 'in':
         height = height * 0.0254
     return weight, height
 
 def calculate_bmi(weight, height):
     return weight / (height ** 2)
+
+def health_status(bmi):
+    if bmi < 18.5:
+        return "Underweight"
+    elif bmi < 25:
+        return "Normal weight"
+    elif bmi < 30:
+        return "Overweight"
+    else:
+        return "Obese"
 
 def recommend_yoga_and_nutrition(bmi):
     if bmi < 18.5:
@@ -24,29 +33,23 @@ def recommend_yoga_and_nutrition(bmi):
     else:
         return "Balasana, Savasana", "Adopt a low-calorie diet, increase water intake, and consult a nutritionist for a personalized plan."
 
-# Route for handling the index and results
+# Routes
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if request.method == 'POST':
-        # Collect data from form
         weight = float(request.form['weight'])
         height = float(request.form['height'])
-        weight_unit = request.form.get('weight_unit')
-        height_unit = request.form.get('height_unit')
+        weight_unit = request.form['weight_unit']
+        height_unit = request.form['height_unit']
 
-        # Convert units and calculate BMI
         weight, height = convert_units(weight, weight_unit, height, height_unit)
         bmi = calculate_bmi(weight, height)
-
-        # Get recommendations
+        status = health_status(bmi)
         yoga, nutrition = recommend_yoga_and_nutrition(bmi)
 
-        # Render the results template with the BMI value and recommendations
-        return render_template('results.html', bmi=round(bmi, 2), yoga=yoga, nutrition=nutrition)
-
-    # Render the index page if method is GET
+        return render_template('results.html', bmi=round(bmi, 2), status=status, yoga=yoga, nutrition=nutrition)
+    
     return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
-
