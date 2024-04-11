@@ -8,16 +8,20 @@
 <body>
     <h1>BMI Calculator</h1>
     <form method="post">
-        <input type="number" name="weight" placeholder="Weight" required>
+        <label for="weight">Weight:</label>
+        <input type="number" name="weight" id="weight" placeholder="Enter your weight" required>
         <select name="weight_unit">
-            <option value="kg">Kilograms</option>
-            <option value="lbs">Pounds</option>
-        </select>
-        <input type="number" name="height" placeholder="Height" required>
+            <option value="kg">kg</option>
+            <option value="lbs">lbs</option>
+        </select><br>
+        
+        <label for="height">Height:</label>
+        <input type="number" name="height" id="height" placeholder="Enter your height" required>
         <select name="height_unit">
-            <option value="cm">Centimeters</option>
-            <option value="in">Inches</option>
-        </select>
+            <option value="cm">cm</option>
+            <option value="in">in</option>
+        </select><br>
+        
         <button type="submit">Calculate BMI</button>
     </form>
 </body>
